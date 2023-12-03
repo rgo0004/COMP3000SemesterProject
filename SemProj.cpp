@@ -155,8 +155,9 @@ void chemicalDatabase::addremove(){
     if(add == 1){
         chem Cnew;
         Cnew.name = chemical;
-        cout << "Enter the description for the chemical. If you wish to end the line within the description use backslash immediately followed by n." << endl;
-        cin >> Cnew.description;
+        cout << "Enter the description for the chemical." << endl;
+        cin.ignore();
+        getline(cin,Cnew.description);
         cout << "Enter the molar mass in g/mol of the chemical." << endl;
         cin >> Cnew.properties[0];
         cout << "Enter the melting point of the chemical in Kelvin." << endl;
@@ -312,8 +313,6 @@ double chemicalDatabase::stockAccess(string chemical){
     }
 }
 
-
-
 void stockRoom::addremove(chemicalDatabase &d){
     int again = 1;
     string chemical;
@@ -345,7 +344,6 @@ void stockRoom::addremove(chemicalDatabase &d){
             already = 1;
             index = 0;
         }
-        cout << already << endl;
     }
     cout << "How much of " << chemical << " would you like to add or remove.\nEnter a value in kilograms, use a negative number to remove stock" << endl;
     cin >> kgadd;
@@ -368,11 +366,16 @@ void stockRoom::addremove(chemicalDatabase &d){
         << "Enter 0 for No and 1 for Yes." << endl;
         cin >> remove;
         if(remove == 1){
-            for(int k=index; k<=stocks.size()-2; k++){
-                stocks[k] = stocks[k+1];
+            if(stocks.size()==1){
+                stocks.clear();
             }
-            stocks.pop_back();
-            cout << chemical << " has been removed from the stockroom." << endl;
+            else{
+                for(int k=index; k<=stocks.size()-2; k++){
+                    stocks[k] = stocks[k+1];
+            }
+                stocks.pop_back();
+                cout << chemical << " has been removed from the stockroom." << endl;
+            }
         }
         else{
             stocks[index].amountkg = 0;
